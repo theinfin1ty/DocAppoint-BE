@@ -23,8 +23,7 @@ const appointmentSchema = new Schema({
         required: true
     },
     purpose: {
-        type: String,
-        required: true
+        type: String
     },
     active: {
         type: Boolean,
