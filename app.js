@@ -11,6 +11,7 @@ const LocalStrategy = require('passport-local');
 const User = require('./models/user');
 
 const userRoutes = require('./routes/users');
+const clientRoutes = require('./routes/client');
 
 mongoose.connect('mongodb://localhost:27017/docAppoint', {
     useNewUrlParser: true,
@@ -65,13 +66,11 @@ app.use((req, res, next) => {
 
 app.use('/', userRoutes);
 
+app.use('/client', clientRoutes);
+
 app.get('/', (req, res) => {
     res.render('home');
 });
-
-app.get('/client', (req, res) => {
-    res.render('clients/appointments/show');
-})
 
 app.all('*', (req, res, next) => {
     next(new ExpressError('Page Not Found'), 404);

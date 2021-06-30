@@ -1,0 +1,24 @@
+<% layout('client/layouts/boilerplate') %>
+<div class="row">
+    <div class="col-6">
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Patient Name: <%= appointment.name %></h5>
+                <p class="card-text">Purpose of visit: <%= appointment.purpose %></p>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Date: <%= appointment.date %></li>
+                    <li class="list-group-item">Time-Slot: <%= appointment.slot %></li>
+                    <li class="list-group-item text-muted">Age: <%= appointment.age %> Years</li>
+                    <li class="list-group-item text-muted">Weight: <%= appointment.weight %> Kgs</li>
+                    <li class="list-group-item text-muted">By: <%= appointment.user.name %></li>
+                </ul>
+            </div>
+            <div class="card-body">
+                <a class="card-link btn btn-info" href="/client/<%= appointment._id %>/edit">Edit</a>
+                <form class="d-inline" action="/client/<%= appointment._id %>?_method=DELETE"  method="post">
+                    <button class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
