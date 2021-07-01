@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const catchAsync = require('../utils/catchAsync');
-const { isLoggedIn } = require('../middleware');
+const { isLoggedIn, isAdmin } = require('../middleware');
 
-router.get('/', isLoggedIn, (req, res) => {
+router.get('/', isLoggedIn, isAdmin, (req, res) => {
     res.render('admin/index');
 })
 

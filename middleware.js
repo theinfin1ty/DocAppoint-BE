@@ -18,3 +18,42 @@ module.exports.isLoggedIn = (req, res, next) => {
     }
     next();
 }
+
+module.exports.isClient = (req, res, next) => {
+    if(req.user.userType != 'client'){
+        req.flash('error', 'You do not have permission to do that!');
+        if(req.user.userType == 'admin'){
+            return res.redirect('/admin');
+        }
+    } else{
+        next();
+    }
+}
+
+module.exports.isAdmin = (req, res, next) => {
+    if(req.user.userType != 'admin'){
+        req.flash('error', 'You do not have permission to do that!');
+        if(req.user.userType == 'client'){
+            return res.redirect('/client');
+        }
+        if(req.user.userType == 'doctor'){
+            return res.redirect('/doctor');
+        }
+    } else{
+        next();
+    }
+}
+
+module.exports.isDoctor = (req, res, next) => {
+    if(req.user.userType != 'doctor'){
+        req.flash('error', 'You do not have permission to do that!');
+        if(req.user.userType == 'client'){
+            return res.redirect('/client');
+        }
+        if(req.user.userType == 'admin'){
+            return res.redirect('/admin');
+        }
+    } else{
+        next();
+    }
+}
