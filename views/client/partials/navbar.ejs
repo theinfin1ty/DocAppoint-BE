@@ -1,3 +1,4 @@
+
 <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
       <a class="navbar-brand" href="#">DocAppoint</a>
@@ -5,10 +6,12 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <% if(currentUser){ %>
         <div class="navbar-nav">
           <a class="nav-link" href="/client">All Appointments</a>
           <a class="nav-link" href="/client/new">New Appointment</a>
         </div>
+        <% } %> 
         <div class="navbar-nav ms-auto">
           <% if(!currentUser){ %> 
           <a class="nav-link" href="/login">Login</a>
