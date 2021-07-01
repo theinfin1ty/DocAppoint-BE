@@ -6,11 +6,11 @@ const { isLoggedIn, validateAppointment } = require('../middleware');
 
 router.get('/', isLoggedIn, catchAsync(async (req, res) => {
     const appointments = await Appointment.find({});
-    res.render('client/appointments/index', { appointments });
+    res.render('appointments/index', { appointments });
 }))
 
 router.get('/new', isLoggedIn, (req, res) => {
-    res.render('client/appointments/new');
+    res.render('appointments/new');
 })
 
 router.post('/', isLoggedIn, validateAppointment, catchAsync(async (req, res) => {
@@ -27,7 +27,7 @@ router.get('/:id', catchAsync(async (req, res) => {
         req.flash('error', 'Cannot find the requested appointment');
         return res.redirect('/client');
     }
-    res.render('client/appointments/show', { appointment });
+    res.render('appointments/show', { appointment });
 }));
 
 router.get('/:id/edit', isLoggedIn, catchAsync(async (req, res) => {
@@ -37,7 +37,7 @@ router.get('/:id/edit', isLoggedIn, catchAsync(async (req, res) => {
         req.flash('error', 'Cannot find that appointment');
         return res.redirect('/client');
     }
-    res.render('client/appointments/edit', { appointment });
+    res.render('appointments/edit', { appointment });
 }))
 
 router.put('/:id', isLoggedIn, validateAppointment, catchAsync(async (req, res) => {
