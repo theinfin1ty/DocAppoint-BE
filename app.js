@@ -12,6 +12,7 @@ const User = require('./models/user');
 
 const userRoutes = require('./routes/users');
 const clientRoutes = require('./routes/client');
+const adminRoutes = require('./routes/admin');
 
 mongoose.connect('mongodb://localhost:27017/docAppoint', {
     useNewUrlParser: true,
@@ -67,6 +68,8 @@ app.use((req, res, next) => {
 app.use('/', userRoutes);
 
 app.use('/client', clientRoutes);
+
+app.use('/admin', adminRoutes);
 
 app.get('/', (req, res) => {
     res.render('home');

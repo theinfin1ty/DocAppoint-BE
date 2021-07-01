@@ -29,16 +29,19 @@ router.get('/login', (req, res) => {
 })
 
 router.post('/login', passport.authenticate('local', { failureFlash: true, failureRedirect: '/login'}), (req, res) => {
+    if(req.user.userType == 'admin')
+    {
+        req.flash('success', `Welcome, ${req.user.name}. This is Admin's Panel`);
+        res.redirect('/admin');
+    }
     req.flash('success', `Welcome, ${req.user.name}`);
-    const redirectUrl = req.session.returnTo || '/client';
-    delete req.session.returnTo;
-    res.redirect(redirectUrl);
+    res.redirect('/client');
 })
 
 router.get('/logout', (req, res) => {
     req.logout();
     req.flash('success', 'Goodbye!');
-    res.redirect('/');
+    res.redirect('/login');
 })
 
 module.exports = router;
