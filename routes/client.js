@@ -5,7 +5,7 @@ const Appointment = require('../models/appointments');
 const { isLoggedIn, validateAppointment } = require('../middleware');
 
 router.get('/', isLoggedIn, catchAsync(async (req, res) => {
-    const appointments = await Appointment.find({});
+    const appointments = await Appointment.find({ user: req.user.id });
     res.render('appointments/index', { appointments });
 }))
 
