@@ -29,13 +29,18 @@ router.get('/login', (req, res) => {
 })
 
 router.post('/login', passport.authenticate('local', { failureFlash: true, failureRedirect: '/login'}), (req, res) => {
-    if(req.user.userType == 'admin')
-    {
-        req.flash('success', `Welcome, ${req.user.name}. This is Admin's Panel`);
+    if(req.user.userType == 'admin'){
+        req.flash('success', `Welcome, ${req.user.name}. This is Admin's Panel!`);
         res.redirect('/admin');
     }
-    req.flash('success', `Welcome, ${req.user.name}`);
-    res.redirect('/client');
+    if(req.user.userType == 'client'){
+        req.flash('success', `Welcome, ${req.user.name}`);
+        res.redirect('/client');
+    }
+    if(req.user.userType == 'doctor'){
+        req.flash('success', `Welcome, Dr. ${req.user.name}. This is Doctor's Panel!`);
+        res.redirect('/doctor');
+    }
 })
 
 router.get('/logout', (req, res) => {

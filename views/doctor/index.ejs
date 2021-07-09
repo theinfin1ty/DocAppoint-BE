@@ -1,0 +1,18 @@
+<% layout('layouts/boilerplate') %>
+<h1>Today's Appointments</h1>
+<% for(let appointment of appointments){ %> 
+<div class="card mb-3">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card-body">
+                <h5 class="card-title"><%= appointment.name %></h5>
+                <p class="card-text"><%= appointment.purpose %></p>
+                <p class="card-text">
+                    <small class="text-muted"><%= appointment.date %> </small>
+                </p>
+                <a class="btn btn-primary" href="/client/<%=appointment._id%>">View <%= appointment.name %></a>
+            </div>
+        </div>
+    </div>
+</div>
+<% } %> 
