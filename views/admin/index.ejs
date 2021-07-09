@@ -1,1 +1,15 @@
 <% layout('layouts/boilerplate') %>
+<div class="col-6 offset-3">
+    <form action="/admin/users" class="validated-form" method="get">
+        <div class="mb-3">
+            <label class="form-label" for="userType">Select User Type:</label>
+            <select class="form-select" name="userType" id="userType">
+                <option selected value="">--Select--</option>
+                <option value="admin">Admin</option>
+                <option value="doctor">Doctor</option>
+                <option value="client">Client</option>
+            </select>
+        </div>
+        <button class="btn btn-primary">Submit</button>
+    </form>
+</div>

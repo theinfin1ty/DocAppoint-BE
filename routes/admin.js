@@ -8,6 +8,12 @@ router.get('/', isLoggedIn, isAdmin, (req, res) => {
     res.render('admin/index');
 })
 
+router.get('/users', isLoggedIn, isAdmin, catchAsync(async (req, res) => {
+    const { userType } = req.query;
+    const users = await User.find({ userType: userType });
+    res.render('admin/users', { users, userType });
+}))
+
 router.get('/register', isLoggedIn, isAdmin, (req, res) => {
     res.render('admin/register');
 })
