@@ -1,0 +1,20 @@
+<% layout('layouts/boilerplate') %>
+<div class="row">
+    <div class="col-6 offset-3">
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Name: <%= user.name %></h5>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">User Type: <strong><%= user.userType %></strong></li>
+                    <li class="list-group-item">Email: <%= user.email %></li>
+                </ul>
+            </div>
+            <div class="card-body">
+                <a class="card-link btn btn-info" href="/admin/users/<%= user._id %>/edit">Change User Type</a>
+                <form class="d-inline" action="/admin/users/<%= user._id %>?_method=DELETE"  method="post">
+                    <button class="btn btn-danger">Delete User</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
