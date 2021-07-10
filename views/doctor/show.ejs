@@ -1,0 +1,38 @@
+<% layout('layouts/boilerplate') %>
+<div class="row">
+    <h2 class="text-center mb-3">Appointment Details</h2>
+    <div class="col-6 offset-3">
+        <div class="mb-3">
+            Patient Name: <strong><%= appointment.name %></strong>
+        </div>
+        <div class="mb-3">
+            Age (in years): <strong><%= appointment.age %></strong>
+        </div>
+        <div class="mb-3">
+            Weight (in Kgs): <strong><%= appointment.weight %></strong>
+        </div>
+        <div class="mb-3">
+            Appointment Date: <strong><%= appointment.date %></strong>
+        </div>
+        <div class="mb-3">
+            Time Slot: <strong><%= appointment.slot %></strong>
+        </div>
+        <div class="mb-3">
+            Purpose of visit: <strong><%= appointment.purpose %></strong>
+        </div>
+        <form class="d-inline" action="" method="post">
+            <div class="mb-3">
+                <label class="form-label" for="remarks">Remarks / Prescription:</label>
+                <textarea type="text" class="form-control" name="remarks" id="remarks" cols="30" rows="3"></textarea>
+            </div>
+            <div class="mb-3">
+                <button class="btn btn-success">Checkout</button>
+            </div>
+        </form>
+        <form class="d-inline" action="" method="post">
+            <div class="mb-3">
+                <button class="btn btn-danger">Reject Appointment</button>
+            </div>
+        </form>
+    </div>
+</div>

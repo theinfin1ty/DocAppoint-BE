@@ -12,8 +12,23 @@ router.get('/', isLoggedIn, isDoctor, catchAsync(async (req, res) => {
 
     today = yyyy + '-' + mm + '-' + dd;
 
-    const appointments = await Appointment.find({ date: today });
+    const appointments = await Appointment.find({ date: today }).sort({ slot: -1 });
     res.render('doctor/index', { appointments });
 }));
+
+router.get('/all', isLoggedIn, isDoctor, catchAsync(async (req, res) => {
+    const appointments = await Appointment.find().sort({ date: -1, slot: -1 });
+    res.render('doctor/all', { appointments });
+}));
+
+router.get('/:id', isLoggedIn, isDoctor, catchAsync(async (req, res) => {
+    const { id } = req.params;
+    const appointment = await Appointment.findById(id);
+    if(!appointment){
+        req.flash('error', 'Cannot find that appointment');
+        return res.redirect('/doctor');
+    }
+    res.render('doctor/show', { appointment });
+}))
 
 module.exports = router;

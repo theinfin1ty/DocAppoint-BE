@@ -12,6 +12,10 @@
           <a class="nav-link" href="/client">All Appointments</a>
           <a class="nav-link" href="/client/new">New Appointment</a>
           <% } %>
+          <% if(currentUser.userType == 'doctor'){ %>
+            <a class="nav-link" href="/doctor">Today's Appointments</a>
+            <a class="nav-link" href="/doctor/all">All Appointments</a>
+            <% } %> 
           <% if(currentUser.userType == 'admin'){ %>
           <a class="nav-link" href="/admin">All Users</a>
           <a class="nav-link" href="/admin/register">Add User</a>
