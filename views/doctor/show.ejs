@@ -20,7 +20,19 @@
         <div class="mb-3">
             Purpose of visit: <strong><%= appointment.purpose %></strong>
         </div>
-        <form class="d-inline" action="" method="post">
+        <div class="mb-3">
+            <% if(appointment.status == 'Active'){ %> 
+            Appointment Status: <strong style="color: blue;"><%= appointment.status %></strong>
+            <% } %>
+            <% if(appointment.status == 'Completed'){ %> 
+            Appointment Status: <strong style="color: green;"><%= appointment.status %></strong>
+            <% } %> 
+            <% if(appointment.status == 'Rejected'){ %> 
+            Appointment Status: <strong style="color: red;"><%= appointment.status %></strong>
+            <% } %>
+        </div>
+        <% if(appointment.status == 'Active'){ %> 
+        <form class="d-inline" action="/doctor/<%= appointment._id %>/checkout?_method=PUT" method="post">
             <div class="mb-3">
                 <label class="form-label" for="remarks">Remarks / Prescription:</label>
                 <textarea type="text" class="form-control" name="remarks" id="remarks" cols="30" rows="3"></textarea>
@@ -29,10 +41,11 @@
                 <button class="btn btn-success">Checkout</button>
             </div>
         </form>
-        <form class="d-inline" action="" method="post">
+        <form class="d-inline" action="/doctor/<%= appointment._id %>?_method=PUT" method="post">
             <div class="mb-3">
                 <button class="btn btn-danger">Reject Appointment</button>
             </div>
         </form>
+        <% } %> 
     </div>
 </div>

@@ -25,9 +25,10 @@ const appointmentSchema = new Schema({
     purpose: {
         type: String
     },
-    active: {
-        type: Boolean,
-        default: true
+    status: {
+        type: String,
+        enum: ['Active', 'Completed', 'Cancelled', 'Rejected'],
+        default: 'Active'
     },
     user: {
         type: Schema.Types.ObjectId,

@@ -31,4 +31,40 @@ router.get('/:id', isLoggedIn, isDoctor, catchAsync(async (req, res) => {
     res.render('doctor/show', { appointment });
 }))
 
+router.put('/:id', isLoggedIn, isDoctor, catchAsync(async (req, res) => {
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+
+    today = yyyy + '-' + mm + '-' + dd;
+    const { id } = req.params;
+    const appointment = await Appointment.findByIdAndUpdate(id, { status: 'Rejected' });
+    req.flash('info', 'Appointment Rejected!');
+    if(appointment.date == today){
+        res.redirect(`/doctor`);
+    }
+    else{
+        res.redirect('/doctor/all');
+    }
+}))
+
+router.put('/:id/checkout', isLoggedIn, isDoctor, catchAsync(async (req, res) => {
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+
+    today = yyyy + '-' + mm + '-' + dd;
+    const { id } = req.params;
+    const appointment = await Appointment.findByIdAndUpdate(id, { status: 'Completed' });
+    req.flash('success', 'Appointment completed successfully!');
+    if(appointment.date == today){
+        res.redirect(`/doctor`);
+    }
+    else{
+        res.redirect('/doctor/all');
+    }
+}))
+
 module.exports = router;
