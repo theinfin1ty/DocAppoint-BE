@@ -31,7 +31,10 @@
             <% } %>
             <% if(appointment.status == 'Completed'){ %> 
             Appointment Status: <strong style="color: green;"><%= appointment.status %></strong>
-            <% } %> 
+            <% } %>
+            <% if(appointment.status == 'Cancelled'){ %> 
+            Appointment Status: <strong style="color: grey;"><%= appointment.status %></strong>
+            <% } %>
             <% if(appointment.status == 'Rejected'){ %> 
             Appointment Status: <strong style="color: red;"><%= appointment.status %></strong>
             <% } %>
@@ -39,8 +42,8 @@
         <% if(appointment.status == 'Active'){ %> 
         <div>
             <a class="card-link btn btn-info" href="/client/<%= appointment._id %>/edit">Edit</a>
-            <form class="d-inline" action="/client/<%= appointment._id %>?_method=DELETE"  method="post">
-                <button class="btn btn-danger">Delete</button>
+            <form class="d-inline" action="/client/<%= appointment._id %>/cancel?_method=PUT"  method="post">
+                <button class="btn btn-danger">Cancel Appointment</button>
             </form>
         </div>
         <% } %> 

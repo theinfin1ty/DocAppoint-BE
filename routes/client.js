@@ -58,11 +58,17 @@ router.put('/:id', isLoggedIn, isClient, validateAppointment, catchAsync(async (
     res.redirect(`/client/${appointment._id}`);
 }))
 
-router.delete('/:id', isLoggedIn, isClient, catchAsync(async (req, res) => {
+router.put('/:id/cancel', isLoggedIn, isClient, catchAsync(async (req, res) => {
     const { id } = req.params;
-    await Appointment.findByIdAndDelete(id);
-    req.flash('success', 'Successfully deleted appointment');
-    res.redirect('/client');
+    const appointment = await Appointment.findById(id);
+    if(appointment.status != 'Active')
+    {
+        req.flash('error', 'Requested appointment is not Active');
+        return res.redirect(`/client/${id}`);
+    }
+    appointment.update({ $set: { status: 'Cancelled' } }).exec();
+    req.flash('success', 'Successfully cancelled appointment!');
+    res.redirect(`/client/${appointment._id}`);
 }))
 
 module.exports = router;
