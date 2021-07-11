@@ -33,6 +33,10 @@ const appointmentSchema = new Schema({
     user: {
         type: Schema.Types.ObjectId,
         ref: 'User'
+    },
+    remark: {
+        type: Schema.Types.ObjectId,
+        ref: 'Remark'
     }
 })
 
