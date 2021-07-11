@@ -1,24 +1,48 @@
 <% layout('layouts/boilerplate') %>
 <div class="row">
-    <div class="col-6">
-        <div class="card mb-3">
-            <div class="card-body">
-                <h5 class="card-title">Patient Name: <%= appointment.name %></h5>
-                <p class="card-text">Purpose of visit: <%= appointment.purpose %></p>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">Date: <%= appointment.date %></li>
-                    <li class="list-group-item">Time-Slot: <%= appointment.slot %></li>
-                    <li class="list-group-item text-muted">Age: <%= appointment.age %> Years</li>
-                    <li class="list-group-item text-muted">Weight: <%= appointment.weight %> Kgs</li>
-                    <li class="list-group-item text-muted">By: <%= appointment.user.name %></li>
-                </ul>
-            </div>
-            <div class="card-body">
-                <a class="card-link btn btn-info" href="/client/<%= appointment._id %>/edit">Edit</a>
-                <form class="d-inline" action="/client/<%= appointment._id %>?_method=DELETE"  method="post">
-                    <button class="btn btn-danger">Delete</button>
-                </form>
-            </div>
+    <h2 class="text-center mb-3">Appointment Details</h2>
+    <div class="col-6 offset-3">
+        <div class="mb-3">
+            Patient Name: <strong><%= appointment.name %></strong>
         </div>
+        <div class="mb-3">
+            Age (in years): <strong><%= appointment.age %></strong>
+        </div>
+        <div class="mb-3">
+            Weight (in Kgs): <strong><%= appointment.weight %></strong>
+        </div>
+        <div class="mb-3">
+            Appointment Date: <strong><%= appointment.date %></strong>
+        </div>
+        <div class="mb-3">
+            Time Slot: <strong><%= appointment.slot %></strong>
+        </div>
+        <div class="mb-3">
+            Purpose of visit: <strong><%= appointment.purpose %></strong>
+        </div>
+        <% if(appointment.status == 'Completed'){ %>
+        <div class="mb-3">
+            Remarks / Prescription: <strong><%= appointment.remark.remark %></strong>
+        </div>
+        <% } %>
+        <div class="mb-3">
+            <% if(appointment.status == 'Active'){ %> 
+            Appointment Status: <strong style="color: blue;"><%= appointment.status %></strong>
+            <% } %>
+            <% if(appointment.status == 'Completed'){ %> 
+            Appointment Status: <strong style="color: green;"><%= appointment.status %></strong>
+            <% } %> 
+            <% if(appointment.status == 'Rejected'){ %> 
+            Appointment Status: <strong style="color: red;"><%= appointment.status %></strong>
+            <% } %>
+        </div> 
+        <% if(appointment.status == 'Active'){ %> 
+        <div>
+            <a class="card-link btn btn-info" href="/client/<%= appointment._id %>/edit">Edit</a>
+            <form class="d-inline" action="/client/<%= appointment._id %>?_method=DELETE"  method="post">
+                <button class="btn btn-danger">Delete</button>
+            </form>
+        </div>
+        <% } %> 
     </div>
 </div>

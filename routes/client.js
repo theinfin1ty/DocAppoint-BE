@@ -22,7 +22,7 @@ router.post('/', isLoggedIn, isClient, validateAppointment, catchAsync(async (re
 }));
 
 router.get('/:id', isLoggedIn, isClient, catchAsync(async (req, res) => {
-    const appointment = await Appointment.findById(req.params.id).populate('user');
+    const appointment = await Appointment.findById(req.params.id).populate('remark');
     if(!appointment){
         req.flash('error', 'Cannot find the requested appointment');
         return res.redirect('/client');
@@ -33,6 +33,11 @@ router.get('/:id', isLoggedIn, isClient, catchAsync(async (req, res) => {
 router.get('/:id/edit', isLoggedIn, isClient, catchAsync(async (req, res) => {
     const { id } = req.params;
     const appointment = await Appointment.findById(id);
+    if(appointment.status != 'Active')
+    {
+        req.flash('error', 'Requested appointment is not Active');
+        return res.redirect(`/client/${id}`);
+    }
     if(!appointment){
         req.flash('error', 'Cannot find that appointment');
         return res.redirect('/client');
@@ -42,7 +47,13 @@ router.get('/:id/edit', isLoggedIn, isClient, catchAsync(async (req, res) => {
 
 router.put('/:id', isLoggedIn, isClient, validateAppointment, catchAsync(async (req, res) => {
     const { id } = req.params;
-    const appointment = await Appointment.findByIdAndUpdate(id, {...req.body.appointment});
+    const appointment = await Appointment.findById(id);
+    if(appointment.status != 'Active')
+    {
+        req.flash('error', 'Requested appointment is not Active');
+        return res.redirect(`/client/${id}`);
+    }
+    appointment.update({ $set: {...req.body.appointment} }).exec();
     req.flash('success', 'Successfully updated appointment!');
     res.redirect(`/client/${appointment._id}`);
 }))
