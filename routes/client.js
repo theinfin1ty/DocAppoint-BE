@@ -66,6 +66,7 @@ router.put('/:id/cancel', isLoggedIn, isClient, catchAsync(async (req, res) => {
         req.flash('error', 'Requested appointment is not Active');
         return res.redirect(`/client/${id}`);
     }
+    //TODO: update() is deprecated replace with an alternative
     appointment.update({ $set: { status: 'Cancelled' } }).exec();
     req.flash('success', 'Successfully cancelled appointment!');
     res.redirect(`/client/${appointment._id}`);
