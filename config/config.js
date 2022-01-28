@@ -1,0 +1,16 @@
+require("dotenv").config() 
+
+var CONFIG = {}
+
+CONFIG.PORT = process.env.PORT || 3000 
+CONFIG.APP_ENV = process.env.APP_ENV || "development" 
+
+CONFIG.SESSION_SECRET = process.env.SESSION_SECRET 
+
+CONFIG.SENDGRID_EMAIL_API_KEY = process.env.SENDGRID_EMAIL_API_KEY 
+
+CONFIG.GOOGLE_CONSUMER_KEY = process.env.GOOGLE_CONSUMER_KEY 
+CONFIG.GOOGLE_CONSUMER_SECRET = process.env.GOOGLE_CONSUMER_SECRET 
+CONFIG.GOOGLE_CALLBACK_URL = process.env.GOOGLE_CALLBACK_URL 
+
+module.exports = CONFIG 

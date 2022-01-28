@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const mongoose = require('mongoose') 
+const Schema = mongoose.Schema 
 
 const remarkSchema = new Schema({
     remark: {
@@ -11,4 +11,4 @@ const remarkSchema = new Schema({
     }
 })
 
-module.exports = mongoose.model('Remark', remarkSchema);
+module.exports = mongoose.model('Remark', remarkSchema) 

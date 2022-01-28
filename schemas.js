@@ -1,4 +1,4 @@
-const Joi = require('joi');
+const Joi = require('joi') 
 
 module.exports.appointmentSchema = Joi.object({
     appointment: Joi.object({
@@ -9,4 +9,4 @@ module.exports.appointmentSchema = Joi.object({
         slot: Joi.string().required(),
         purpose: Joi.string()
     }).required()
-});
+}) 
