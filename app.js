@@ -8,7 +8,7 @@ const flash = require('connect-flash')
 const methodOverride = require('method-override') 
 const passport = require('passport') 
 const LocalStrategy = require('passport-local') 
-const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy 
+const GoogleStrategy = require('passport-google-oauth20').Strategy 
 
 const ExpressError = require('./utils/ExpressError') 
 const CONFIG = require('./config/config') 
@@ -60,34 +60,41 @@ app.use(flash())
 app.use(passport.initialize()) 
 app.use(passport.session()) 
 passport.use(new LocalStrategy({usernameField:'email'}, User.authenticate())) 
+
 passport.use(new GoogleStrategy({
     clientID: CONFIG.GOOGLE_CONSUMER_KEY,
     clientSecret: CONFIG.GOOGLE_CONSUMER_SECRET,
     callbackURL: CONFIG.GOOGLE_CALLBACK_URL,
-    passReqToCallback: true
     },
-    async (accessToken, refreshToken, profile, user) => {
-        console.log(user)
-        const existingUser = await User.findOne({ email: user.emails[0].value })
-        if(!existingUser){
-            const newUser = new User({
-                name: user.displayName,
-                email: user.emails[0].value,
-                username: user.emails[0].value,
-                googleId: user.id,
-            })
-            await newUser.save()
-            return newUser
-        } else {
-            existingUser.googleId = user.id
-            await existingUser.save()
-            return existingUser
+    async (accessToken, refreshToken, profile, done) => {
+        const existingUser = await User.findOne({ email: profile.emails[0].value })
+        if(existingUser) {
+            existingUser.googleId = profile.id
+            existingUser.save()
+            return done(null, existingUser)
         }
-   }
-  )) 
+        const newUser = new User({
+            email: profile.emails[0].value,
+            username: profile.emails[0].value,
+            googleId: profile.id,
+            name: profile.displayName,
+        })
+        await newUser.save()
+        return done(null, newUser)
+    }
+)) 
 
-passport.serializeUser(User.serializeUser()) 
-passport.deserializeUser(User.deserializeUser()) 
+// passport.serializeUser(User.serializeUser()) 
+// passport.deserializeUser(User.deserializeUser()) 
+
+passport.serializeUser( (user, done) => { 
+    done(null, user)
+})
+
+
+passport.deserializeUser((user, done) => {  
+    done (null, user)
+}) 
 
 app.use((req, res, next) => {
     res.locals.currentUser = req.user 
