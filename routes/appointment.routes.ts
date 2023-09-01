@@ -1,16 +1,16 @@
 import { Router } from 'express';
-import catchAsync from '../utils/catchAsync';
 import controller from '../controllers/appointment.controller';
+import auth from '../middlewares/auth.middleware';
 
 const router = Router();
 
 const { getAllAppointments, getAppointment, createAppointment, updateAppointment } = controller;
 
-router.get('/', catchAsync(getAllAppointments));
-router.get('/:id', catchAsync(getAppointment));
+router.get('/', auth({ roles: ['doctor', 'client'] }), getAllAppointments);
+router.get('/:id', auth({ roles: ['doctor', 'client'] }), getAppointment);
 
-router.post('/', catchAsync(createAppointment));
+router.post('/', auth({ roles: ['doctor', 'client'] }), createAppointment);
 
-router.patch('/:id', catchAsync(updateAppointment));
+router.patch('/:id', auth({ roles: ['doctor', 'client'] }), updateAppointment);
 
 export default router;

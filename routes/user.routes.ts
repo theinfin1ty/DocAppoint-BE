@@ -1,19 +1,19 @@
 import { Router } from 'express';
-import catchAsync from '../utils/catchAsync';
 import controller from '../controllers/user.controller';
+import auth from '../middlewares/auth.middleware';
 
 const router = Router();
 
 const { register, getAllUsers, getUser, updateUser, deleteUser, addUser } = controller;
 
-router.post('/add', catchAsync(addUser));
-router.post('/register', catchAsync(register));
+router.post('/add', auth({ roles: ['admin'] }), addUser);
+router.post('/register', register);
 
-router.get('/', catchAsync(getAllUsers));
-router.get('/:id', catchAsync(getUser));
+router.get('/', auth({ roles: ['admin'] }), getAllUsers);
+router.get('/:id', auth({ roles: ['admin', 'client', 'doctor'] }), getUser);
 
-router.patch('/:id', catchAsync(updateUser));
+router.patch('/:id', auth({ roles: ['admin'] }), updateUser);
 
-router.delete('/:id', catchAsync(deleteUser));
+router.delete('/:id', auth({ roles: ['admin'] }), deleteUser);
 
 export default router;
