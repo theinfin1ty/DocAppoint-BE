@@ -1,0 +1,56 @@
+{
+  "env": {
+    "commonjs": true,
+    "es2021": true,
+    "node": true
+  },
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+  "rules": {
+    "node/no-unpublished-require": 0,
+    "max-len": ["error", { "code": 100 }],
+    "spaced-comment": 0,
+    "no-console": "warn",
+    "consistent-return": 0,
+    "func-names": 0,
+    "object-shorthand": 0,
+    "no-process-exit": 0,
+    "no-param-reassign": 0,
+    "no-return-await": 0,
+    "no-underscore-dangle": 0,
+    "class-methods-use-this": 0,
+    "import/no-named-as-default": 0,
+    "import/prefer-default-export": "off",
+    "no-useless-catch": "off",
+    "prefer-destructuring": ["error", { "object": true, "array": false }],
+    "no-unused-vars": ["error", { "argsIgnorePattern": "req|res|next|val" }],
+    "node/no-unsupported-features/es-syntax": ["error", { "ignores": ["modules"] }],
+    "@typescript-eslint/quotes": 0,
+    "object-curly-newline": [
+      "error",
+      {
+        "ObjectExpression": { "multiline": true, "minProperties": 3 }
+      }
+    ],
+    "object-property-newline": ["error", { "allowAllPropertiesOnSameLine": false }],
+    "node/no-missing-import": [
+      "error",
+      {
+        "allowModules": [],
+        "resolvePaths": ["/path/to/a/modules/directory"],
+        "tryExtensions": [".js", ".json", ".node", ".ts"]
+      }
+    ]
+  },
+  "plugins": ["@typescript-eslint", "security", "unused-imports"],
+  "extends": [
+    "airbnb-typescript/base",
+    "eslint:recommended",
+    "plugin:node/recommended",
+    "plugin:security/recommended",
+    "plugin:import/recommended",
+    "prettier"
+  ]
+}
