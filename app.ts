@@ -36,7 +36,7 @@ mongoose
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
-app.use('/', routes);
+app.use('/api', routes);
 
 app.all('*', (req, res) => {
   res.send('404 Not Found');

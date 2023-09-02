@@ -43,13 +43,26 @@ const getAllUsers = async (req: Request, res: Response) => {
   }
 };
 
+const getLoggedInUser = async (req: any, res: Response) => {
+  try {
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(404).send({ error: 'User not found!' });
+    }
+    return res.status(200).send(user);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send({ error: 'Something went wrong!' });
+  }
+};
+
 const getUser = async (req: Request, res: Response) => {
   try {
     const user = await User.findById(req.params.id);
     if (!user) {
       return res.status(404).send({ error: 'User not found!' });
     }
-    return res.status(404).send(user);
+    return res.status(200).send(user);
   } catch (error) {
     console.log(error);
     return res.status(500).send({ error: 'Something went wrong!' });
@@ -111,6 +124,7 @@ export default {
   register,
   getAllUsers,
   getUser,
+  getLoggedInUser,
   updateUser,
   deleteUser,
   addUser,

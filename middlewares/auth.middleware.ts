@@ -17,7 +17,7 @@ export default (options) => {
 
       if (!options) return next();
 
-      if (!options.hasRole.includes(req.role)) {
+      if (!options.roles.includes(req?.user?.role)) {
         return res.status(401).send({ error: 'Access Denied!' });
       }
       next();
