@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import * as admin from 'firebase-admin';
 import User from '../models/user.model';
+import { verificationToken } from '../utils/auth.util';
 
 const register = async (req: Request, res: Response) => {
   try {
@@ -20,9 +21,24 @@ const register = async (req: Request, res: Response) => {
       name,
       email,
       uid: userRecord.uid,
+      role: 'doctor',
     });
 
     return res.status(200).send(user);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send({ error: 'Something went wrong!' });
+  }
+};
+
+const initiateForgotPassword = async (req: Request, res: Response) => {
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).send({ error: 'User not found!' });
+    }
+    const token = await verificationToken({ email });
   } catch (error) {
     console.log(error);
     return res.status(500).send({ error: 'Something went wrong!' });
