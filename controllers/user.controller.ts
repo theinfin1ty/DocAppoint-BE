@@ -21,7 +21,6 @@ const register = async (req: Request, res: Response) => {
       name,
       email,
       uid: userRecord.uid,
-      role: 'doctor',
     });
 
     return res.status(200).send(user);
@@ -108,7 +107,6 @@ const deleteUser = async (req: Request, res: Response) => {
   }
 };
 
-// TODO: Fix after initializing firebase
 const addUser = async (req: Request, res: Response) => {
   try {
     const { name, role, email, password } = req.body;
@@ -144,4 +142,5 @@ export default {
   updateUser,
   deleteUser,
   addUser,
+  initiateForgotPassword,
 };

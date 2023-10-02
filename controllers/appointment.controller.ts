@@ -72,13 +72,17 @@ const updateAppointment = async (req: Request, res: Response) => {
       return res.status(400).send({ error: 'Appointment is not Active' });
     }
 
-    appointment.status = status;
-    appointment.slot = slot;
-    appointment.name = name;
-    appointment.age = age;
-    appointment.weight = weight;
-    appointment.date = date;
-    appointment.purpose = purpose;
+    const updates = Object.keys(req.body);
+    const allowedUpdates = ['status', 'slot', 'name', 'age', 'weight', 'date', 'purpose', 'remark'];
+    const isValidOperation = updates.every((update) => allowedUpdates.includes(update));
+
+    if (!isValidOperation) {
+      return res.status(400).send({ error: 'Invalid updates!' });
+    }
+
+    for (let update of updates) {
+      appointment[update] = req.body[update];
+    }
 
     await appointment.save();
     return res.status(200).send(appointment);
