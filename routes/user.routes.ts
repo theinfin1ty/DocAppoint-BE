@@ -4,11 +4,20 @@ import auth from '../middlewares/auth.middleware';
 
 const router = Router();
 
-const { register, getAllUsers, getUser, getLoggedInUser, updateUser, deleteUser, addUser } =
-  controller;
+const {
+  register,
+  getAllUsers,
+  getUser,
+  getLoggedInUser,
+  updateUser,
+  deleteUser,
+  addUser,
+  initiateForgotPassword,
+} = controller;
 
 router.post('/add', auth({ roles: ['admin'] }), addUser);
 router.post('/register', register);
+router.post('/forgot', initiateForgotPassword);
 
 router.get('/', auth({ roles: ['admin'] }), getAllUsers);
 router.get('/profile', auth({ roles: ['admin', 'client', 'doctor'] }), getLoggedInUser);

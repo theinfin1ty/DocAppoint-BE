@@ -6,13 +6,13 @@ sgMail.setApiKey(CONFIG.SENDGRID_EMAIL_API_KEY);
 
 const sendEmail = (details) => {
   const msg = {
-    to: 'gaming4247365@gmail.com',
+    to: details.email,
     from: {
       name: 'DocAppoint',
       email: 'notification@myomasafecure.in',
     },
-    subject: 'DocAppoint - OTP',
-    text: `Your OTP is: ${details.otp}`,
+    subject: details.subject,
+    text: `Please follow this link to reset your account password: ${details.link}`,
   };
   sgMail
     .send(msg)
@@ -24,4 +24,4 @@ const sendEmail = (details) => {
     });
 };
 
-module.exports = sendEmail;
+export default sendEmail;
