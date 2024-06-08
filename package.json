@@ -33,10 +33,11 @@
     "joi": "^17.4.0",
     "jsonwebtoken": "^9.0.2",
     "moment-timezone": "^0.5.43",
-    "mongoose": "^5.12.13",
+    "mongoose": "^8.4.1",
     "typescript": "^5.2.2"
   },
   "devDependencies": {
+    "@flydotio/dockerfile": "^0.5.7",
     "@typescript-eslint/eslint-plugin": "^6.5.0",
     "@typescript-eslint/parser": "^6.5.0",
     "eslint": "^8.48.0",
