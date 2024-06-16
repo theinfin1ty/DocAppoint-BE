@@ -13,6 +13,12 @@ const appointmentSchema = new Schema(
     weight: {
       type: Number,
     },
+    phone: {
+      type: Number,
+    },
+    address: {
+      type: String,
+    },
     date: {
       type: Date,
       required: true,
@@ -24,6 +30,11 @@ const appointmentSchema = new Schema(
     },
     purpose: {
       type: String,
+    },
+    type: {
+      type: String,
+      enum: ['new', 'follow-up'],
+      default: 'new',
     },
     status: {
       type: String,

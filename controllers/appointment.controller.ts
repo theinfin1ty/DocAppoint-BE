@@ -25,7 +25,7 @@ const getAllAppointments = async (req: any, res: Response) => {
     const response = {
       data: appointments,
       pagination: {
-        total: await Appointment.countDocuments({}),
+        total: await Appointment.countDocuments(where),
         page,
         count: appointments.length,
       },

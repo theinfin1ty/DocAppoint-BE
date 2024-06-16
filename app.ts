@@ -1,8 +1,9 @@
 import { config } from 'dotenv';
-import express, { Express } from 'express';
+import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import * as admin from 'firebase-admin';
+import morgan from 'morgan';
 import routes from './routes/index';
 import CONFIG from './config/config';
 
@@ -33,6 +34,8 @@ mongoose
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
+app.use(morgan('dev'));
+
 app.use('/api', routes);
 
 app.all('*', (req, res) => {
