@@ -1,57 +1,6 @@
 import { Request, Response } from 'express';
 import * as admin from 'firebase-admin';
 import User from '../models/user.model';
-import { verificationToken } from '../utils/auth.util';
-import sendEmail from '../utils/email.util';
-
-const register = async (req: Request, res: Response) => {
-  try {
-    const { name, email, password } = req.body;
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.status(400).send({ error: 'User already exists!' });
-    }
-    const userRecord = await admin.auth().createUser({
-      email,
-      emailVerified: true,
-      password,
-      displayName: name,
-      disabled: false,
-    });
-    const user = await User.create({
-      name,
-      email,
-      uid: userRecord.uid,
-    });
-
-    return res.status(200).send(user);
-  } catch (error) {
-    console.log(error);
-    return res.status(500).send({ error: 'Something went wrong!' });
-  }
-};
-
-const initiateForgotPassword = async (req: Request, res: Response) => {
-  try {
-    const { email } = req.body;
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(404).send({ error: 'User not found!' });
-    }
-    const token = await verificationToken({ email });
-
-    await sendEmail({
-      email,
-      link: token,
-      subject: 'Password Reset',
-    });
-
-    return res.status(200).send({ message: 'Password reset email sent!' });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).send({ error: 'Something went wrong!' });
-  }
-};
 
 const getAllUsers = async (req: Request, res: Response) => {
   try {
@@ -144,12 +93,10 @@ const addUser = async (req: Request, res: Response) => {
 };
 
 export default {
-  register,
   getAllUsers,
   getUser,
   getLoggedInUser,
   updateUser,
   deleteUser,
   addUser,
-  initiateForgotPassword,
 };

@@ -1,13 +1,11 @@
-import * as admin from 'firebase-admin';
 import User from '../models/user.model';
+import { verifyToken } from '../utils/auth.util';
 
 export default (options) => {
   return async (req, res, next) => {
     try {
-      const decodedToken = await admin
-        .auth()
-        .verifyIdToken(req.header('Authorization').replace('Bearer ', ''));
-      const user = await User.findOne({ uid: decodedToken.uid });
+      const decodedToken: any = verifyToken(req.header('Authorization').replace('Bearer ', ''));
+      const user = await User.findOne({ _id: decodedToken._id });
 
       if (!user) {
         return res.status(401).send({ error: 'Access Denied!' });
