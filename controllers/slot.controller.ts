@@ -21,9 +21,8 @@ const getDoctorSlots = async (req: any, res: Response) => {
     }));
 
     appointments.forEach((apt) => {
-      const dateStr = apt.date.toISOString().split('T')[0];
       slots.push({
-        date: dateStr,
+        date: apt.date,
         slot: apt.slot,
         blocked: false,
         booked: true,
@@ -98,7 +97,7 @@ const getAvailableSlots = async (req: any, res: Response) => {
   try {
     const { date, doctorId } = req.query;
     let targetDoctorId = doctorId || req.user?._id;
-    
+
     // If no doctorId provided and user is not a doctor, find first doctor
     if (!targetDoctorId || req.user?.role !== 'doctor') {
       const User = require('../models/user.model').default;
@@ -118,14 +117,14 @@ const getAvailableSlots = async (req: any, res: Response) => {
         endTime: '17:00',
         breakStart: '13:00',
         breakEnd: '14:00',
-        workingDays: [1, 2, 3, 4, 5, 6]
+        workingDays: [1, 2, 3, 4, 5, 6],
       };
-      
+
       const dayOfWeek = new Date(date as string).getDay();
       if (!defaultSettings.workingDays.includes(dayOfWeek)) {
         return res.status(200).send({ slots: [] });
       }
-      
+
       const generateDefaultSlots = () => {
         const slots: any = [];
         const start = new Date(`2000-01-01T${defaultSettings.startTime}`);
@@ -137,16 +136,16 @@ const getAvailableSlots = async (req: any, res: Response) => {
         while (current < end) {
           const timeStr = current.toTimeString().slice(0, 5);
           const isBreakTime = current >= breakStart && current < breakEnd;
-          
+
           if (!isBreakTime) {
             slots.push(timeStr);
           }
-          
+
           current.setMinutes(current.getMinutes() + defaultSettings.slotDuration);
         }
         return slots;
       };
-      
+
       return res.status(200).send({ slots: generateDefaultSlots() });
     }
 
