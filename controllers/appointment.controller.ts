@@ -15,10 +15,12 @@ const getAllAppointments = async (req: any, res: Response) => {
       where.date = {
         $gte: moment().startOf('day').toDate(),
       };
-      where.status = 'active';
+      where.status = { $in: ['pending', 'confirmed'] };
     }
     if (req.user?.role === 'client') {
       where.user = req.user?._id;
+    } else if (req.user?.role === 'doctor') {
+      where.doctor = req.user?._id;
     }
     const appointments = await Appointment.find(where).skip(skip).limit(limit).sort({ date: 1 });
 
@@ -42,6 +44,13 @@ const createAppointment = async (req: any, res: Response) => {
   try {
     const appointment: any = new Appointment({ ...req.body });
     appointment.user = req.user?._id;
+    // For now, assign to first doctor found or leave empty
+    // In a real system, you'd have logic to assign to specific doctors
+    const User = require('../models/user.model').default;
+    const doctor = await User.findOne({ role: 'doctor' });
+    if (doctor) {
+      appointment.doctor = doctor._id;
+    }
     await appointment.save();
     return res.status(200).send(appointment);
   } catch (error) {
@@ -68,8 +77,13 @@ const updateAppointment = async (req: Request, res: Response) => {
     const { id } = req.params;
     const { status, slot, name, age, weight, date, purpose } = req.body;
     const appointment = await Appointment.findById(id);
-    if (appointment?.status != 'active') {
-      return res.status(400).send({ error: 'Appointment is not Active' });
+
+    if (!appointment) {
+      return res.status(404).send({ error: 'Appointment not found!' });
+    }
+
+    if (!['pending', 'confirmed'].includes(appointment?.status as string)) {
+      return res.status(400).send({ error: 'Appointment cannot be modified' });
     }
 
     const updates = Object.keys(req.body);

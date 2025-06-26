@@ -25,7 +25,6 @@ const appointmentSchema = new Schema(
     },
     slot: {
       type: String,
-      enum: ['morning', 'evening'],
       required: true,
     },
     purpose: {
@@ -38,10 +37,15 @@ const appointmentSchema = new Schema(
     },
     status: {
       type: String,
-      enum: ['active', 'completed', 'cancelled', 'rejected', 'missed'],
-      default: 'active',
+      enum: ['pending', 'confirmed', 'completed', 'cancelled', 'rejected', 'missed'],
+      default: 'pending',
     },
     user: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
+    },
+    doctor: {
       type: Schema.Types.ObjectId,
       ref: 'User',
     },

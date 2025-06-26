@@ -7,6 +7,7 @@ import {
   verifyToken,
 } from '../utils/auth.util';
 import OTP from '../models/otp.model';
+import * as admin from 'firebase-admin';
 
 const initiateLogin = async (req: Request, res: Response) => {
   try {
@@ -38,7 +39,36 @@ const initiateLogin = async (req: Request, res: Response) => {
 
 const login = async (req: Request, res: Response) => {
   try {
-    const { phoneNumber, otp } = req.body;
+    const { phoneNumber, otp, idToken, provider } = req.body;
+
+    // Google Sign-In
+    if (provider === 'google' && idToken) {
+      try {
+        const decodedToken = await admin.auth().verifyIdToken(idToken);
+        const { email, name, phone_number } = decodedToken;
+        
+        let user = await User.findOne({ email });
+        
+        if (!user) {
+          user = await User.create({
+            email,
+            name,
+            phoneNumber: phone_number || email,
+          });
+        }
+        
+        const tokens = generateAuthTokens(user.toJSON());
+        
+        return res.status(200).send({
+          user,
+          tokens,
+        });
+      } catch (error) {
+        return res.status(400).send({ error: 'Invalid Google token!' });
+      }
+    }
+
+    // SMS OTP Login
 
     const sentOTP = await OTP.findOne({
       phoneNumber,
@@ -67,6 +97,7 @@ const login = async (req: Request, res: Response) => {
 
     const user = await User.create({
       phoneNumber,
+      name: 'User',
     });
 
     const tokens = generateAuthTokens(user.toJSON());
