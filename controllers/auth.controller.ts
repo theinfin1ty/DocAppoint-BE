@@ -8,24 +8,29 @@ import {
 } from '../utils/auth.util';
 import OTP from '../models/otp.model';
 import * as admin from 'firebase-admin';
+import sendEmail from '../utils/email.util';
 
 const initiateLogin = async (req: Request, res: Response) => {
   try {
-    const { phoneNumber } = req.body;
+    const { phoneNumber, email } = req.body;
 
-    if (!Number(phoneNumber)) {
-      return res.status(400).send({ error: 'Invalid phone number!' });
-    }
+    // if (!Number(phoneNumber) || phoneNumber?.length < 10 || phoneNumber?.length > 10) {
+    //   return res.status(400).send({ error: 'Invalid phone number!' });
+    // }
 
     const otp = generateOTP(6);
 
     await OTP.create({
-      phoneNumber,
+      email,
       otp,
       expiresAt: new Date(Date.now() + 1 * 60 * 60 * 1000).toISOString(),
     });
 
-    // TODO: add logic to send otp via sms
+    sendEmail({
+      to: email,
+      subject: 'OTP for Myomasafecure',
+      text: `Hi<br>You one time password to sign in to Myomasafecure is: <strong>${otp}</strong>`,
+    });
 
     return res.status(200).send({
       success: true,
@@ -39,16 +44,16 @@ const initiateLogin = async (req: Request, res: Response) => {
 
 const login = async (req: Request, res: Response) => {
   try {
-    const { phoneNumber, otp, idToken, provider } = req.body;
+    const { phoneNumber, otp, idToken, provider, email } = req.body;
 
     // Google Sign-In
     if (provider === 'google' && idToken) {
       try {
         const decodedToken = await admin.auth().verifyIdToken(idToken);
         const { email, name, phone_number } = decodedToken;
-        
+
         let user = await User.findOne({ email });
-        
+
         if (!user) {
           user = await User.create({
             email,
@@ -56,9 +61,9 @@ const login = async (req: Request, res: Response) => {
             phoneNumber: phone_number || email,
           });
         }
-        
+
         const tokens = generateAuthTokens(user.toJSON());
-        
+
         return res.status(200).send({
           user,
           tokens,
@@ -71,7 +76,7 @@ const login = async (req: Request, res: Response) => {
     // SMS OTP Login
 
     const sentOTP = await OTP.findOne({
-      phoneNumber,
+      email,
       otp,
       expiresAt: {
         $gte: new Date().toISOString(),
@@ -82,9 +87,9 @@ const login = async (req: Request, res: Response) => {
       return res.status(400).send({ error: 'Invalid OTP!' });
     }
 
-    await OTP.deleteMany({ phoneNumber });
+    await OTP.deleteMany({ email });
 
-    const existingUser = await User.findOne({ phoneNumber });
+    const existingUser = await User.findOne({ email });
 
     if (existingUser) {
       const tokens = generateAuthTokens(existingUser.toJSON());
@@ -96,8 +101,8 @@ const login = async (req: Request, res: Response) => {
     }
 
     const user = await User.create({
-      phoneNumber,
-      name: 'User',
+      email,
+      name: `${email}`.split('@')[0],
     });
 
     const tokens = generateAuthTokens(user.toJSON());
@@ -115,7 +120,6 @@ const login = async (req: Request, res: Response) => {
 const refresh = async (req: Request, res: Response) => {
   try {
     const { refreshToken } = req.body;
-    console.log(refreshToken);
     if (!refreshToken) {
       return res.status(400).send({ error: 'Refresh token is required!' });
     }

@@ -1,27 +1,18 @@
-const sgMail = require('@sendgrid/mail');
+const { Resend } = require('resend');
 
 const CONFIG = require('../config/config');
 
-sgMail.setApiKey(CONFIG.SENDGRID_EMAIL_API_KEY);
-
-const sendEmail = (details) => {
+const sendEmail = async (details) => {
+  const resend = new Resend(process.env.RESEND_EMAIL_API_KEY);
   const msg = {
-    to: details.email,
-    from: {
-      name: 'DocAppoint',
-      email: 'notification@myomasafecure.in',
-    },
+    to: details.to,
+    from: 'Myomasafecure <notifications@myomasafecure.in>',
     subject: details.subject,
-    text: `Please follow this link to reset your account password: ${details.link}`,
+    html: `${details.text}`,
   };
-  sgMail
-    .send(msg)
-    .then((response) => {
-      console.log(`Email delivered with status: ${response[0].statusCode}`);
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+
+  const res = await resend.emails.send(msg);
+  console.log(res);
 };
 
 export default sendEmail;

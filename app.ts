@@ -1,5 +1,6 @@
 import { config } from 'dotenv';
 import express from 'express';
+import { rateLimit } from 'express-rate-limit';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import * as admin from 'firebase-admin';
@@ -31,9 +32,21 @@ mongoose
   .then(() => console.log('Connected to MongoDB'))
   .catch((err) => console.log(err));
 
+app.use(
+  rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    limit: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
+    standardHeaders: 'draft-8', // draft-6: `RateLimit-*` headers; draft-7 & draft-8: combined `RateLimit` header
+    legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
+  })
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors());
+app.use(
+  cors({
+    origin: [process.env.WEB_URL as string],
+  })
+);
 app.use(morgan('dev'));
 
 app.use('/api', routes);

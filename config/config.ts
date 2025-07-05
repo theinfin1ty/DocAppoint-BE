@@ -1,11 +1,11 @@
 require('dotenv').config();
 
-var CONFIG: any = {};
+const CONFIG: any = {};
 
 CONFIG.PORT = process.env.PORT || 3000;
 CONFIG.APP_ENV = process.env.APP_ENV || 'development';
 
-CONFIG.SENDGRID_EMAIL_API_KEY = process.env.SENDGRID_EMAIL_API_KEY;
+CONFIG.RESEND_EMAIL_API_KEY = process.env.RESEND_EMAIL_API_KEY;
 
 CONFIG.FIREBASE_ACCOUNT_TYPE = process.env.FIREBASE_ACCOUNT_TYPE;
 CONFIG.FIREBASE_PROJECT_ID = process.env.FIREBASE_PROJECT_ID;
